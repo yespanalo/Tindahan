@@ -59,3 +59,26 @@ def create_items(request):
             
     except Exception as e:
         return Response({"success:":False,"message":str(e)})
+    
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_selling_price(request):
+    try:
+        item_id_request = request.data.get('item_id')
+        item = Items.objects.get(item_id=item_id_request)
+        
+        selling_price = request.data.get('selling_price')
+        if selling_price is None:
+            return Response({"success":True,"message":"selling_price is required"})
+        if selling_price <0:
+            return Response({"success":False,"message":"selling_price must be greater than 0"})
+        
+        item.current_price = selling_price
+        item.save()
+        
+        serializer = ItemsSerializer(item)
+        return Response({"success":True,"data":serializer.data})
+        
+    except Exception as e:
+        return Response({"success":False,"message":str(e)})
+    

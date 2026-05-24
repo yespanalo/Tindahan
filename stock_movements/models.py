@@ -15,6 +15,7 @@ class Stock_Movements(models.Model):
     quantity = models.IntegerField(null=False,blank=False)
     cost_price = models.FloatField(null=True,blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    sell_price = models.FloatField(null=True,blank=False)
     
     def __str__(self):
         return self.item_id.item_name
