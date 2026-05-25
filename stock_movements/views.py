@@ -49,7 +49,8 @@ def create_sale(request):
 @permission_classes([IsAuthenticated])
 def get_sales(request):
     try:
-        sales = Stock_Movements.objects.filter(movement_type = 'out')
+        # sales = Stock_Movements.objects.filter(movement_type = 'out')
+        sales = Stock_Movements.objects.all()
         serializer = StockMovementSerializer(sales,many = True)
         return Response({"success":True,"data":serializer.data})
     except Exception as e:
