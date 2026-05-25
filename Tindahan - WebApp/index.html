@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>Inventory Manager</h1>
+                <p>Admin Portal</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="admin" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+                <div id="loginError" class="error-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboardScreen" class="screen">
+        <nav class="navbar">
+            <div class="navbar-content">
+                <div class="navbar-brand">
+                    <h2>Inventory</h2>
+                </div>
+                <div class="navbar-menu">
+                    <button id="navItems" class="nav-btn active" data-section="items">Items</button>
+                    <button id="navSales" class="nav-btn" data-section="sales">Sales</button>
+                    <button id="navSalesReport" class="nav-btn" data-section="salesReport">Sales Report</button>
+                    <button id="navProfile" class="nav-btn" data-section="profile">Profile</button>
+                    <button id="logoutBtn" class="nav-btn btn-logout">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <main class="dashboard-main">
+            <!-- Items Section -->
+            <section id="itemsSection" class="section active">
+                <div class="section-header">
+                    <h2>Inventory Items</h2>
+                    <button id="addItemBtn" class="btn btn-primary">+ Add Item</button>
+                </div>
+
+                <div id="itemsList" class="items-grid">
+                    <div class="loading-spinner">Loading items...</div>
+                </div>
+            </section>
+
+            <!-- Sales Section -->
+            <section id="salesSection" class="section">
+                <div class="section-header">
+                    <h2>Create Sale Movement</h2>
+                </div>
+
+                <div class="sales-container">
+                    <div class="sales-form-card">
+                        <h3>Record Movement</h3>
+                        <form id="saleForm" class="form">
+                            <div class="form-group">
+                                <label for="saleItemId">Select Item</label>
+                                <select id="saleItemId" required>
+                                    <option value="">Choose an item...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="movementType">Movement Type</label>
+                                <div class="radio-group">
+                                    <label class="radio-label">
+                                        <input type="radio" name="movementType" value="in" required>
+                                        Stock In
+                                    </label>
+                                    <label class="radio-label">
+                                        <input type="radio" name="movementType" value="out" required>
+                                        Stock Out
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="saleQuantity">Quantity</label>
+                                <input type="text" id="saleQuantity" inputmode="numeric" autocomplete="off">
+                            </div>
+                            <div id="costPriceGroup" class="form-group" style="display: none;">
+                                <label for="saleCostPrice">Cost Price</label>
+                                <input type="number" id="saleCostPrice" step="0.01" min="0">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">Record Movement</button>
+                        </form>
+                        <div id="saleError" class="error-message"></div>
+                        <div id="saleSuccess" class="success-message"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profileSection" class="section">
+                <div class="section-header">
+                    <h2>Account Settings</h2>
+                </div>
+
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <h3>User Information</h3>
+                        <div id="userInfo" class="info-display">
+                            <div class="loading-spinner">Loading user info...</div>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3>Change Password</h3>
+                        <form id="passwordForm" class="form">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <input type="password" id="currentPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <input type="password" id="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <input type="password" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-full">Update Password</button>
+                        </form>
+                        <div id="passwordError" class="error-message"></div>
+                        <div id="passwordSuccess" class="success-message"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- sales section -->
+             <section id="salesReportSection" class="section">
+                <div class="section-header">
+                    <h2>Sales Report</h2>
+                </div>
+
+                <div class="report-filters">
+
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="salesStartDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="salesEndDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Item</label>
+                        <select id="reportItemFilter">
+                            <option value="">All Items</option>
+                        </select>
+                    </div>
+
+                    <button id="filterSalesBtn" class="btn btn-primary">
+                        Filter
+                    </button>
+
+                    <button id="resetSalesBtn" class="btn btn-secondary">
+                        Reset
+                    </button>
+
+                </div>
+
+                <div class="table-container">
+                    <table id="salesTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Item</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Sell Price</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody">
+                            <!-- dynamic -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add/Edit Item Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="itemModalTitle">Add New Item</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="itemForm" class="form">
+                <div class="form-group">
+                    <label for="itemName">Item Name</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="currentPrice">Current Price</label>
+                    <input type="number" id="currentPrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="costPrice">Cost Price</label>
+                    <input type="number" id="costPrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="currentStock">Initial Stock</label>
+                    <input type="number" id="currentStock" min="0" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Save Item</button>
+                    <button type="button" class="btn btn-secondary" id="cancelItemBtn">Cancel</button>
+                </div>
+            </form>
+            <div id="itemFormError" class="error-message"></div>
+        </div>
+    </div>
+
+    <!-- Price Update Modal -->
+    <div id="priceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Item Price</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <form id="priceForm" class="form">
+                <div class="form-group">
+                    <label for="priceItemName">Item</label>
+                    <input type="text" id="priceItemName" disabled>
+                    <input type="hidden" id="priceItemId">
+                </div>
+                <div class="form-group">
+                    <label for="newPrice">New Price</label>
+                    <input type="number" id="newPrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Update Price</button>
+                    <button type="button" class="btn btn-secondary" id="cancelPriceBtn">Cancel</button>
+                </div>
+            </form>
+            <div id="priceFormError" class="error-message"></div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="ui.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
